@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GithubRepo</string>
+
+    <string name="go_to_repository">Go to repository</string>
+    <string name="load_data">Load data</string>
+    <string name="title">Load data</string>
+
 </resources>
