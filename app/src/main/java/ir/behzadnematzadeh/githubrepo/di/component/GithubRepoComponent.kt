@@ -4,7 +4,8 @@ import dagger.Component
 import ir.behzadnematzadeh.githubrepo.di.module.NetModule
 import ir.behzadnematzadeh.githubrepo.di.module.UserRemoteModule
 import ir.behzadnematzadeh.githubrepo.remote.repository.UserRemoteRepository
-import ir.behzadnematzadeh.githubrepo.ui.main.MainActivity
+import ir.behzadnematzadeh.githubrepo.ui.details.DetailFragment
+import ir.behzadnematzadeh.githubrepo.ui.main.MainFragment
 
 @Component(
     modules = [
@@ -13,7 +14,8 @@ import ir.behzadnematzadeh.githubrepo.ui.main.MainActivity
     ]
 )
 interface GithubRepoComponent {
-    fun inject(mainActivity: MainActivity)
+    fun inject(mainFragment: MainFragment)
+    fun inject(detailFragment: DetailFragment)
 
     @Component.Factory
     interface Factory {
