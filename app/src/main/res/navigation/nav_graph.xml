@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="ir.behzadnematzadeh.githubrepo.ui.main.MainFragment"
+        android:label="MainFragment">
+        <action
+            android:id="@+id/to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="ir.behzadnematzadeh.githubrepo.ui.details.DetailFragment"
+        android:label="DetailFragment">
+        <argument
+            android:name="repository"
+            app:argType="ir.behzadnematzadeh.githubrepo.model.UserRepo" />
+    </fragment>
+
+</navigation>
