@@ -5,7 +5,7 @@ import ir.behzadnematzadeh.githubrepo.di.module.NetModule
 import ir.behzadnematzadeh.githubrepo.di.module.UserRemoteModule
 import ir.behzadnematzadeh.githubrepo.remote.repository.UserRemoteRepository
 import ir.behzadnematzadeh.githubrepo.ui.details.DetailFragment
-import ir.behzadnematzadeh.githubrepo.ui.main.MainFragment
+import ir.behzadnematzadeh.githubrepo.ui.repo.RepoFragment
 
 @Component(
     modules = [
@@ -14,7 +14,7 @@ import ir.behzadnematzadeh.githubrepo.ui.main.MainFragment
     ]
 )
 interface GithubRepoComponent {
-    fun inject(mainFragment: MainFragment)
+    fun inject(repoFragment: RepoFragment)
     fun inject(detailFragment: DetailFragment)
 
     @Component.Factory

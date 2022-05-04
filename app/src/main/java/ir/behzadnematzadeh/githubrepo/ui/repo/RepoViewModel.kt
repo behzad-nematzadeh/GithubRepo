@@ -1,4 +1,4 @@
-package ir.behzadnematzadeh.githubrepo.ui.main
+package ir.behzadnematzadeh.githubrepo.ui.repo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,14 +14,14 @@ import ir.behzadnematzadeh.githubrepo.util.Resource
 import javax.inject.Inject
 import javax.inject.Provider
 
-class MainViewModel @Inject constructor(
+class RepoViewModel @Inject constructor(
     private val remoteRepository: UserRemoteRepository
 ) : ViewModel() {
 
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     class Factory @Inject constructor(
-        private val provider: Provider<MainViewModel>
+        private val provider: Provider<RepoViewModel>
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = provider.get() as T
     }
