@@ -2,10 +2,20 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/repoFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/splashFragment"
+        android:name="ir.behzadnematzadeh.githubrepo.ui.splash.SplashFragment"
+        app:popUpToInclusive="true"
+        android:label="SplashFragment">
+        <action
+            android:id="@+id/to_repoFragment"
+            app:destination="@id/repoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/repoFragment"
         android:name="ir.behzadnematzadeh.githubrepo.ui.repo.RepoFragment"
         android:label="MainFragment">
         <action
