@@ -1,16 +1,14 @@
 package ir.behzadnematzadeh.githubrepo.ui.main
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import ir.behzadnematzadeh.githubrepo.BaseApp
-import ir.behzadnematzadeh.githubrepo.R
 import ir.behzadnematzadeh.githubrepo.databinding.FragmentMainBinding
 import javax.inject.Inject
 
@@ -23,6 +21,8 @@ class MainFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: MainViewModel.Factory
     private lateinit var viewModel: MainViewModel
+
+    private var mainAdapter: MainAdapter? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,8 +45,22 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mainAdapter = MainAdapter { }
+        binding.recycler.adapter = mainAdapter
+        binding.recycler.layoutManager = LinearLayoutManager(requireActivity())
         binding.btnLoad.setOnClickListener {
-            findNavController().navigate(R.id.to_detailFragment)
+            binding.progress.visibility = View.VISIBLE
+            it.isEnabled = false
+            viewModel.loadResults()
+        }
+
+        viewModel.repos.observe(viewLifecycleOwner) { event ->
+            binding.progress.visibility = View.INVISIBLE
+            binding.btnLoad.isEnabled = true
+            if (event.isSuccessful) {
+                mainAdapter?.addAll(event.data())
+            }
+            //findNavController().navigate(R.id.to_detailFragment)
         }
     }
 }

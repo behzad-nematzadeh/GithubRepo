@@ -1,18 +1,21 @@
 package ir.behzadnematzadeh.githubrepo.ui.main
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import ir.behzadnematzadeh.githubrepo.model.UserRepo
 import ir.behzadnematzadeh.githubrepo.remote.repository.UserRemoteRepository
+import ir.behzadnematzadeh.githubrepo.util.Resource
 import javax.inject.Inject
 import javax.inject.Provider
 
 class MainViewModel @Inject constructor(
-    remoteRepository: UserRemoteRepository
+    private val remoteRepository: UserRemoteRepository
 ) : ViewModel() {
 
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -25,17 +28,16 @@ class MainViewModel @Inject constructor(
 
     private val tag = "MainViewModel"
 
-    init {
+    private val _repos = MutableLiveData<Resource<List<UserRepo>>>()
+    val repos: LiveData<Resource<List<UserRepo>>> get() = _repos
+
+    fun loadResults() {
         remoteRepository.userRepository("JakeWharton")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {
-                    Log.d(tag, "$it")
-                },
-                {
-                    Log.e(tag, it.toString())
-                }
+                { userRepoList -> _repos.value = Resource(userRepoList) },
+                { error -> _repos.value = Resource(error) }
             ).addToComposite()
     }
 
