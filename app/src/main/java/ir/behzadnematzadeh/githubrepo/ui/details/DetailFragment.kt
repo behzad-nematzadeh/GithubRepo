@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ir.behzadnematzadeh.githubrepo.BaseApp
 import ir.behzadnematzadeh.githubrepo.R
 import ir.behzadnematzadeh.githubrepo.databinding.FragmentDetailsBinding
@@ -41,4 +42,12 @@ class DetailFragment : Fragment() {
     ): View = FragmentDetailsBinding.inflate(inflater, container, false).also {
         _binding = it
     }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnBack.setOnClickListener{
+            findNavController().popBackStack()
+        }
+    }
 }
