@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ir.behzadnematzadeh.githubrepo.BaseApp
 import ir.behzadnematzadeh.githubrepo.databinding.FragmentRepoBinding
+import ir.behzadnematzadeh.githubrepo.util.ViewResource
 import javax.inject.Inject
 
 class RepoFragment : Fragment() {
@@ -61,8 +62,10 @@ class RepoFragment : Fragment() {
         viewModel.repos.observe(viewLifecycleOwner) { event ->
             binding.progress.visibility = View.INVISIBLE
             binding.btnLoad.isEnabled = true
-            if (event.isSuccessful) {
-                adapter?.addAll(event.data())
+            when (event) {
+                is ViewResource.Failure -> {}
+                is ViewResource.Success -> adapter?.addAll(event.data)
+                else -> return@observe
             }
         }
     }

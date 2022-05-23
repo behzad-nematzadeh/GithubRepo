@@ -10,7 +10,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ir.behzadnematzadeh.githubrepo.model.UserRepo
 import ir.behzadnematzadeh.githubrepo.remote.repository.UserRemoteRepository
-import ir.behzadnematzadeh.githubrepo.util.Resource
+import ir.behzadnematzadeh.githubrepo.util.ViewResource
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -28,16 +28,16 @@ class RepoViewModel @Inject constructor(
 
     private val tag = "MainViewModel"
 
-    private val _repos = MutableLiveData<Resource<List<UserRepo>>>()
-    val repos: LiveData<Resource<List<UserRepo>>> get() = _repos
+    private val _repos = MutableLiveData<ViewResource<List<UserRepo>>>()
+    val repos: LiveData<ViewResource<List<UserRepo>>> get() = _repos
 
     fun loadResults() {
         remoteRepository.userRepository("JakeWharton")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { userRepoList -> _repos.value = Resource(userRepoList) },
-                { error -> _repos.value = Resource(error) }
+                { userRepoList -> _repos.value = ViewResource.Success(userRepoList) },
+                { error -> _repos.value = ViewResource.Failure(error) }
             ).addToComposite()
     }
 
