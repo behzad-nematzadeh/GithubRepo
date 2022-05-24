@@ -49,7 +49,7 @@ class RepoAdapter(
             listener: (UserRepo) -> Unit
         ) {
             with(itemView) {
-                view.rMainTxt.text = userRepo.name
+                view.txtRepoName.text = userRepo.name
                 setOnClickListener { listener(userRepo) }
             }
         }

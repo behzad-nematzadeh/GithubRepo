@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import ir.behzadnematzadeh.githubrepo.BaseApp
 import ir.behzadnematzadeh.githubrepo.databinding.FragmentRepoBinding
+import ir.behzadnematzadeh.githubrepo.model.UserRepo
 import ir.behzadnematzadeh.githubrepo.util.ViewResource
 import javax.inject.Inject
 
-class RepoFragment : Fragment() {
+class RepoFragment : Fragment(), ClickListener {
 
     private var _binding: FragmentRepoBinding? = null
     private val binding: FragmentRepoBinding
@@ -24,7 +24,7 @@ class RepoFragment : Fragment() {
     lateinit var viewModelFactory: RepoViewModel.Factory
     private lateinit var viewModel: RepoViewModel
 
-    private var adapter: RepoAdapter? = null
+    lateinit var controller: RepoController
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -47,14 +47,10 @@ class RepoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadRepo()
+        controller = RepoController(this)
+        binding.recycler.setController(controller)
 
-        adapter = RepoAdapter {
-            val direction = RepoFragmentDirections.toDetailFragment(it)
-            findNavController().navigate(direction)
-        }
-        binding.recycler.adapter = adapter
-        binding.recycler.layoutManager = LinearLayoutManager(requireActivity())
+        loadRepo()
         binding.btnLoad.setOnClickListener {
             loadRepo()
         }
@@ -64,7 +60,7 @@ class RepoFragment : Fragment() {
             binding.btnLoad.isEnabled = true
             when (event) {
                 is ViewResource.Failure -> {}
-                is ViewResource.Success -> adapter?.addAll(event.data)
+                is ViewResource.Success -> controller.setData(event.data)
                 else -> return@observe
             }
         }
@@ -72,15 +68,18 @@ class RepoFragment : Fragment() {
 
     private fun loadRepo() {
         with(binding) {
-            recycler.adapter?.let { recyclerViewAdapter ->
-                recyclerViewAdapter.notifyItemRangeRemoved(
-                    0,
-                    recyclerViewAdapter.itemCount
-                )
-            }
             progress.visibility = View.VISIBLE
             btnLoad.isEnabled = false
         }
         viewModel.loadResults()
     }
+
+    override fun onItemClicked(userRepo: UserRepo, position: Int) {
+        val direction = RepoFragmentDirections.toDetailFragment(userRepo)
+        findNavController().navigate(direction)
+    }
+}
+
+interface ClickListener {
+    fun onItemClicked(userRepo: UserRepo, position : Int)
 }
