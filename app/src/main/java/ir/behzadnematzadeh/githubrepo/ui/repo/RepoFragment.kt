@@ -14,7 +14,7 @@ import ir.behzadnematzadeh.githubrepo.model.UserRepo
 import ir.behzadnematzadeh.githubrepo.util.ViewResource
 import javax.inject.Inject
 
-class RepoFragment : Fragment(), ClickListener {
+class RepoFragment : Fragment(), RepoController.ClickListener {
 
     private var _binding: FragmentRepoBinding? = null
     private val binding: FragmentRepoBinding
@@ -24,7 +24,7 @@ class RepoFragment : Fragment(), ClickListener {
     lateinit var viewModelFactory: RepoViewModel.Factory
     private lateinit var viewModel: RepoViewModel
 
-    lateinit var controller: RepoController
+    private lateinit var controller: RepoController
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -50,36 +50,29 @@ class RepoFragment : Fragment(), ClickListener {
         controller = RepoController(this)
         binding.recycler.setController(controller)
 
-        loadRepo()
         binding.btnLoad.setOnClickListener {
-            loadRepo()
+            viewModel.loadResults()
         }
 
         viewModel.repos.observe(viewLifecycleOwner) { event ->
-            binding.progress.visibility = View.INVISIBLE
-            binding.btnLoad.isEnabled = true
             when (event) {
-                is ViewResource.Failure -> {}
-                is ViewResource.Success -> controller.setData(event.data)
-                else -> return@observe
+                is ViewResource.NotInitialized -> {
+                    binding.btnLoad.isEnabled = false
+                }
+                is ViewResource.Loading -> {
+                    binding.btnLoad.isEnabled = false
+                }
+                is ViewResource.Success -> {
+                    binding.btnLoad.isEnabled = true
+                }
+                is ViewResource.Failure -> {
+                    binding.btnLoad.isEnabled = true
+                }
             }
+            controller.setData(event)
         }
     }
 
-    private fun loadRepo() {
-        with(binding) {
-            progress.visibility = View.VISIBLE
-            btnLoad.isEnabled = false
-        }
-        viewModel.loadResults()
-    }
-
-    override fun onItemClicked(userRepo: UserRepo, position: Int) {
-        val direction = RepoFragmentDirections.toDetailFragment(userRepo)
-        findNavController().navigate(direction)
-    }
-}
-
-interface ClickListener {
-    fun onItemClicked(userRepo: UserRepo, position : Int)
+    override fun onItemClicked(userRepo: UserRepo, position: Int) =
+        findNavController().navigate(RepoFragmentDirections.toDetailFragment(userRepo))
 }

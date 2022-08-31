@@ -31,7 +31,12 @@ class RepoViewModel @Inject constructor(
     private val _repos = MutableLiveData<ViewResource<List<UserRepo>>>()
     val repos: LiveData<ViewResource<List<UserRepo>>> get() = _repos
 
+    init {
+        loadResults()
+    }
+
     fun loadResults() {
+        _repos.value = ViewResource.Loading()
         remoteRepository.userRepository("JakeWharton")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
