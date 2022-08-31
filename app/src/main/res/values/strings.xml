@@ -5,4 +5,8 @@
     <string name="load_data">Load data</string>
     <string name="title">Load data</string>
 
+    <string name="please_wait">Please Wait…</string>
+    <string name="refresh">Refresh</string>
+    <string name="retry">Retry</string>
+
 </resources>
