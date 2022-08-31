@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
             val navHostFragment = obtainNavHostFragment()
 
             supportFragmentManager.beginTransaction()
-                .add(R.id.nav_host_container, navHostFragment)
+                .add(R.id.nav_host_container, navHostFragment, NavHostTag)
                 .setPrimaryNavigationFragment(navHostFragment)
                 .commit()
         }
